@@ -1,0 +1,26 @@
+{
+  "modelId": "risklens-credit-default",
+  "version": "1.0.0-synthetic",
+  "trainedAt": "2026-08-25T00:00:00Z",
+  "trainingData": "Deterministic synthetic fixture shaped like common credit-default tabular schemas",
+  "intendedUse": "Education, model-serving demonstrations, and human-reviewed decision support only",
+  "intercept": -1.28,
+  "calibration": { "slope": 0.92, "intercept": -0.06 },
+  "features": [
+    { "name": "age", "mean": 42.0, "scale": 13.0, "coefficient": -0.16, "reasonCode": "LIMITED_AGE_STABILITY_SIGNAL" },
+    { "name": "logCreditLimit", "mean": 11.82, "scale": 0.85, "coefficient": -0.34, "reasonCode": "LOW_CREDIT_CAPACITY_REFERENCE" },
+    { "name": "repaymentStatusCurrent", "mean": -0.02, "scale": 1.12, "coefficient": 0.76, "reasonCode": "CURRENT_PAYMENT_DELAY" },
+    { "name": "repaymentStatusPrior", "mean": -0.13, "scale": 1.19, "coefficient": 0.51, "reasonCode": "PRIOR_PAYMENT_DELAY" },
+    { "name": "utilizationCurrent", "mean": 0.31, "scale": 0.31, "coefficient": 0.49, "reasonCode": "HIGH_CURRENT_UTILIZATION" },
+    { "name": "utilizationPrior", "mean": 0.30, "scale": 0.30, "coefficient": 0.21, "reasonCode": "HIGH_PRIOR_UTILIZATION" },
+    { "name": "paymentRatioCurrent", "mean": 0.19, "scale": 0.42, "coefficient": -0.30, "reasonCode": "LOW_CURRENT_PAYMENT_RATIO" },
+    { "name": "paymentRatioPrior", "mean": 0.20, "scale": 0.44, "coefficient": -0.18, "reasonCode": "LOW_PRIOR_PAYMENT_RATIO" },
+    { "name": "billTrend", "mean": 0.01, "scale": 0.16, "coefficient": 0.22, "reasonCode": "RISING_BALANCE_TREND" }
+  ],
+  "referenceNormalizedMeans": {
+    "repaymentStatusCurrent": 0.0,
+    "utilizationCurrent": 0.0,
+    "paymentRatioCurrent": 0.0,
+    "billTrend": 0.0
+  }
+}

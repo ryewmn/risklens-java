@@ -1,0 +1,44 @@
+[
+  {
+    "name": "typical-current-account",
+    "input": {
+      "creditLimit": 200000.0,
+      "age": 41,
+      "repaymentStatusCurrent": 0,
+      "repaymentStatusPrior": 0,
+      "billAmountCurrent": 54000.0,
+      "billAmountPrior": 51000.0,
+      "paymentAmountCurrent": 9000.0,
+      "paymentAmountPrior": 8500.0
+    },
+    "expectedProbability": 0.20463803236738098
+  },
+  {
+    "name": "delayed-high-utilization",
+    "input": {
+      "creditLimit": 50000.0,
+      "age": 27,
+      "repaymentStatusCurrent": 3,
+      "repaymentStatusPrior": 2,
+      "billAmountCurrent": 49000.0,
+      "billAmountPrior": 46000.0,
+      "paymentAmountCurrent": 500.0,
+      "paymentAmountPrior": 700.0
+    },
+    "expectedProbability": 0.9746680016729165
+  },
+  {
+    "name": "paid-low-utilization",
+    "input": {
+      "creditLimit": 500000.0,
+      "age": 55,
+      "repaymentStatusCurrent": -1,
+      "repaymentStatusPrior": -1,
+      "billAmountCurrent": 10000.0,
+      "billAmountPrior": 12000.0,
+      "paymentAmountCurrent": 10000.0,
+      "paymentAmountPrior": 12000.0
+    },
+    "expectedProbability": 0.013796527256303022
+  }
+]

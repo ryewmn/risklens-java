@@ -1,0 +1,13 @@
+target/
+build/
+.idea/
+.vscode/
+*.iml
+*.log
+.DS_Store
+.env
+data/
+models/*.onnx
+training/.venv/
+training/__pycache__/
+training/*.pyc

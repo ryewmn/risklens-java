@@ -1,0 +1,111 @@
+openapi: 3.1.0
+info:
+  title: RiskLens API
+  version: 1.0.0
+  description: Educational credit-default risk inference. Not for consequential decisions.
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/v1/predictions:
+    post:
+      operationId: predictDefaultRisk
+      summary: Score one validated credit-account snapshot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ApplicantFeatures' }
+            example:
+              creditLimit: 200000
+              age: 41
+              repaymentStatusCurrent: 0
+              repaymentStatusPrior: 0
+              billAmountCurrent: 54000
+              billAmountPrior: 51000
+              paymentAmountCurrent: 9000
+              paymentAmountPrior: 8500
+      responses:
+        '201':
+          description: Prediction created
+          headers:
+            X-Request-ID: { schema: { type: string, format: uuid } }
+            Cache-Control: { schema: { type: string, const: no-store } }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Prediction' }
+        '400':
+          description: Invalid or malformed request
+          content:
+            application/problem+json:
+              schema: { $ref: '#/components/schemas/Problem' }
+  /api/v1/model:
+    get:
+      operationId: getModelMetadata
+      responses:
+        '200':
+          description: Active model identity
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ModelMetadata' }
+  /api/v1/model/drift:
+    get:
+      operationId: getDriftReport
+      responses:
+        '200':
+          description: Process-local safe aggregate drift report
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, sampleCount, minimumSamples, aggregateStandardizedMeanShift, featureShifts, measuredAt]
+                properties:
+                  status: { type: string, enum: [INSUFFICIENT_DATA, STABLE, WARNING, CRITICAL] }
+                  sampleCount: { type: integer, format: int64 }
+                  minimumSamples: { type: integer, format: int64 }
+                  aggregateStandardizedMeanShift: { type: number }
+                  featureShifts: { type: object, additionalProperties: { type: number } }
+                  measuredAt: { type: string, format: date-time }
+components:
+  schemas:
+    ApplicantFeatures:
+      type: object
+      additionalProperties: false
+      required: [creditLimit, age, repaymentStatusCurrent, repaymentStatusPrior, billAmountCurrent, billAmountPrior, paymentAmountCurrent, paymentAmountPrior]
+      properties:
+        creditLimit: { type: number, exclusiveMinimum: 0, maximum: 10000000 }
+        age: { type: integer, minimum: 18, maximum: 100 }
+        repaymentStatusCurrent: { type: integer, minimum: -2, maximum: 8 }
+        repaymentStatusPrior: { type: integer, minimum: -2, maximum: 8 }
+        billAmountCurrent: { type: number, minimum: -1000000, maximum: 10000000 }
+        billAmountPrior: { type: number, minimum: -1000000, maximum: 10000000 }
+        paymentAmountCurrent: { type: number, minimum: 0, maximum: 10000000 }
+        paymentAmountPrior: { type: number, minimum: 0, maximum: 10000000 }
+    Prediction:
+      type: object
+      required: [requestId, defaultProbability, riskBand, reasonCodes, model, predictedAt]
+      properties:
+        requestId: { type: string, format: uuid }
+        defaultProbability: { type: number, minimum: 0, maximum: 1 }
+        riskBand: { type: string, enum: [LOW, MODERATE, HIGH, CRITICAL] }
+        reasonCodes: { type: array, maxItems: 3, items: { type: string } }
+        model: { $ref: '#/components/schemas/ModelMetadata' }
+        predictedAt: { type: string, format: date-time }
+    ModelMetadata:
+      type: object
+      required: [id, version, artifactSha256, trainedAt, engine]
+      properties:
+        id: { type: string }
+        version: { type: string }
+        artifactSha256: { type: string, pattern: '^[a-f0-9]{64}$' }
+        trainedAt: { type: string }
+        engine: { type: string }
+    Problem:
+      type: object
+      properties:
+        type: { type: string, format: uri }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        instance: { type: string, format: uri }
+        code: { type: string }
+        violations: { type: object, additionalProperties: { type: string } }
