@@ -1,5 +1,7 @@
 # RiskLens
 
+[![CI](https://github.com/ryewmn/risklens-java/actions/workflows/ci.yml/badge.svg)](https://github.com/ryewmn/risklens-java/actions/workflows/ci.yml)
+
 RiskLens is a production-shaped Java 17 service for explainable credit-default risk inference. It turns a versioned model artifact into a validated REST API with calibrated probabilities, stable reason codes, drift signals, Prometheus metrics, health probes, and privacy-safe operational logs.
 
 It is a portfolio and learning project, not a lending decision system. The bundled model is trained on synthetic data and must not be used to approve, deny, or price credit.
